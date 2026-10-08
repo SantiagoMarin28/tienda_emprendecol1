@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmprendeCol · Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#1f1b2e;--suave:#5d5873;--fondo:#f7f5f0;--papel:#fff;--borde:#e4e0d6;
+  --pri:#4b3bb5;--pri-o:#392b94;--pri-c:#ece9fb;--acento:#d9822b;--acento-c:#fbefe2;
+  --ok:#1f7a4d;--ok-c:#e3f4ea;--mal:#b3261e;--mal-c:#fce8e6;--info:#2a4e86;--info-c:#e8f0fb;
+  --r:12px;--sombra:0 1px 2px rgba(31,27,46,.06),0 4px 16px rgba(31,27,46,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--tinta);background:var(--fondo);line-height:1.5;padding-bottom:84px}
+a{color:var(--pri)}
+h1,h2,h3,.marca,.serif{font-family:Fraunces,Georgia,serif}
+h1{font-size:clamp(1.6rem,3.2vw,2.3rem);margin:0;line-height:1.15}
+h2{font-size:1.3rem;margin:0 0 10px}
+h3{font-size:1.05rem;margin:0 0 6px}
+p{margin:0 0 10px}
+button{font:inherit}
+.contenedor{max-width:1120px;margin:0 auto;padding:24px 16px 40px}
+
+/* Barra */
+.top{background:var(--tinta);color:#fff;position:sticky;top:0;z-index:20}
+.top-in{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.marca{color:#fff;text-decoration:none;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.sello{width:30px;height:30px;border-radius:8px;background:var(--acento);display:grid;place-items:center;font-size:1rem}
+.nav{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.nav a{color:#d8d4ea;text-decoration:none;font-weight:500}
+.nav a:hover,.nav a.activo{color:#fff}
+.nav a.activo{text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--acento)}
+.top-der{margin-left:auto;display:flex;gap:12px;align-items:center}
+.icono-btn{position:relative;color:#fff;text-decoration:none;display:flex;align-items:center;gap:6px;font-weight:500}
+.contador{position:absolute;top:-8px;right:-10px;background:var(--acento);color:#fff;font-size:.7rem;font-weight:700;border-radius:99px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#3a3456;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+
+/* Selector de rol del prototipo */
+.rol{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:30;background:var(--tinta);color:#bdb7d6;border-radius:99px;padding:6px;display:flex;align-items:center;gap:4px;box-shadow:0 8px 30px rgba(0,0,0,.25);font-size:.85rem}
+.rol span{padding:0 10px 0 12px}
+.rol button{border:0;background:transparent;color:#d8d4ea;padding:8px 14px;border-radius:99px;cursor:pointer;font-weight:600}
+.rol button.on{background:#fff;color:var(--tinta)}
+
+/* Botones y formularios */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--borde);background:var(--papel);color:var(--tinta);font-weight:600;padding:10px 18px;border-radius:10px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--suave)}
+.btn-p{background:var(--pri);border-color:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-o)}
+.btn-a{background:var(--acento);border-color:var(--acento);color:#fff}
+.btn-mal{color:var(--mal)}.btn-mal:hover{background:var(--mal-c);border-color:var(--mal)}
+.btn-ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn-sm{padding:6px 12px;font-size:.85rem}
+.btn-bloque{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+label{display:block;font-weight:600;font-size:.9rem;margin:14px 0 6px}
+input,select,textarea{font:inherit;color:var(--tinta);background:#fff;border:1px solid var(--borde);border-radius:10px;padding:10px 12px;width:100%}
+input:focus-visible,select:focus-visible,textarea:focus-visible,.btn:focus-visible{outline:3px solid rgba(75,59,181,.35);outline-offset:1px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.9rem}
+.check input{width:auto;margin-top:4px}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Piezas */
+.tarjeta{background:var(--papel);border:1px solid var(--borde);border-radius:var(--r);padding:20px;box-shadow:var(--sombra)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;padding:3px 10px;border-radius:99px;background:var(--pri-c);color:var(--pri);font-weight:600}
+.badge{display:inline-block;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.b-gris{background:#eeece6;color:var(--suave)}.b-ok{background:var(--ok-c);color:var(--ok)}.b-mal{background:var(--mal-c);color:var(--mal)}
+.b-info{background:var(--info-c);color:var(--info)}.b-acento{background:var(--acento-c);color:#9a5410}.b-pri{background:var(--pri-c);color:var(--pri)}
+.sobre{color:var(--suave);font-size:.9rem;margin:0 0 4px}
+.sobre a{color:var(--suave);text-decoration:none}
+.cabecera{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.muted{color:var(--suave)}
+.peq{font-size:.85rem}
+.num{font-variant-numeric:tabular-nums}
+.sep{border:0;border-top:1px solid var(--borde);margin:14px 0}
+.linea{display:flex;justify-content:space-between;gap:12px;padding:4px 0}
+.linea.total{border-top:1px solid var(--borde);margin-top:6px;padding-top:10px;font-weight:700;font-size:1.05rem}
+.aviso{display:flex;gap:12px;align-items:flex-start;background:var(--ok-c);border:1px solid #b5dfc5;color:#185e3b;padding:14px 16px;border-radius:var(--r);font-size:.92rem}
+.aviso.info{background:var(--info-c);border-color:#c4d6f2;color:var(--info)}
+.aviso.alerta{background:var(--acento-c);border-color:#f0cfa6;color:#82470d}
+.aviso.mal{background:var(--mal-c);border-color:#f2b8b5;color:var(--mal)}
+.aviso svg{flex:none;margin-top:2px}
+
+/* Héroe */
+.heroe{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center;background:var(--tinta);color:#fff;border-radius:18px;padding:32px;margin-bottom:24px;overflow:hidden;position:relative}
+.heroe h1{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+.heroe p{color:#d8d4ea;font-size:1.05rem;margin:12px 0 18px}
+.pasos-confianza{display:grid;gap:10px}
+.pasos-confianza div{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;font-size:.92rem}
+.pasos-confianza b{width:28px;height:28px;flex:none;border-radius:50%;background:var(--acento);display:grid;place-items:center;font-size:.85rem}
+.buscador{display:flex;gap:8px;background:#fff;border-radius:12px;padding:6px}
+.buscador input{border:0}
+.buscador .btn{border:0}
+
+/* Catálogo */
+.catalogo{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start}
+.filtros h3{font-family:Inter,sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--suave);margin:16px 0 8px}
+.filtros h3:first-child{margin-top:0}
+.filtro-op{display:flex;justify-content:space-between;width:100%;text-align:left;border:0;background:transparent;padding:7px 10px;border-radius:8px;cursor:pointer;color:var(--tinta)}
+.filtro-op:hover{background:#efece4}
+.filtro-op.on{background:var(--pri-c);color:var(--pri);font-weight:600}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.prod{background:var(--papel);border:1px solid var(--borde);border-radius:var(--r);overflow:hidden;text-decoration:none;color:var(--tinta);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.prod:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(31,27,46,.08)}
+.prod-cuerpo{padding:12px 14px 14px;display:grid;gap:4px}
+.prod-nombre{font-weight:600}
+.prod-precio{font-family:Fraunces,Georgia,serif;font-size:1.2rem}
+.prod-emp{font-size:.82rem;color:var(--suave);display:flex;align-items:center;gap:6px}
+.arte{aspect-ratio:4/3;display:grid;place-items:center;position:relative}
+.arte svg{width:38%;height:38%;opacity:.9}
+.arte .agotado{position:absolute;top:10px;left:10px}
+.estrellas{color:var(--acento);letter-spacing:1px}
+.vacio{text-align:center;padding:48px 16px;border:1px dashed var(--borde);border-radius:var(--r);background:var(--papel)}
+
+/* Detalle */
+.detalle{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.detalle .arte{border-radius:var(--r);aspect-ratio:1/1}
+.miniaturas{display:flex;gap:8px;margin-top:10px}
+.miniaturas .arte{width:72px;aspect-ratio:1/1;border-radius:10px;border:2px solid transparent;cursor:pointer}
+.miniaturas .arte.on{border-color:var(--pri)}
+.precio-grande{font-family:Fraunces,Georgia,serif;font-size:2.2rem;margin:8px 0 4px}
+.cantidad{display:inline-flex;align-items:center;border:1px solid var(--borde);border-radius:10px;background:#fff}
+.cantidad button{border:0;background:transparent;width:40px;height:42px;cursor:pointer;font-size:1.1rem}
+.cantidad span{min-width:36px;text-align:center;font-weight:600}
+.emp-mini{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--tinta)}
+.logo{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:700;font-family:Fraunces,Georgia,serif;font-size:1.2rem;flex:none}
+
+/* Carrito y pedidos */
+.dos-col{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.grupo{margin-bottom:16px}
+.grupo-cab{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--borde);margin-bottom:6px}
+.item{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--borde)}
+.item:last-child{border-bottom:0}
+.item .arte{width:64px;aspect-ratio:1/1;border-radius:10px}
+.item .arte svg{width:50%;height:50%}
+.pegajoso{position:sticky;top:76px}
+.opcion-pago{display:flex;gap:12px;align-items:center;border:1px solid var(--borde);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-weight:500}
+.opcion-pago:has(input:checked){border-color:var(--pri);background:var(--pri-c)}
+.opcion-pago input{width:auto;margin:0}
+
+.lista-pedidos{display:grid;gap:12px}
+.pedido-fila{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-decoration:none;color:var(--tinta)}
+.pedido-fila:hover{border-color:var(--pri)}
+
+/* Línea de tiempo */
+.tiempo{list-style:none;padding:0;margin:0;position:relative}
+.tiempo li{position:relative;padding:0 0 18px 34px}
+.tiempo li:last-child{padding-bottom:0}
+.tiempo li::before{content:"";position:absolute;left:10px;top:22px;bottom:-2px;width:2px;background:var(--borde)}
+.tiempo li:last-child::before{display:none}
+.tiempo .punto{position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;border:2px solid var(--borde);background:#fff;display:grid;place-items:center}
+.tiempo li.hecho .punto{background:var(--ok);border-color:var(--ok)}
+.tiempo li.hecho::before{background:var(--ok)}
+.tiempo li.actual .punto{border-color:var(--pri);box-shadow:0 0 0 4px var(--pri-c)}
+.tiempo li.alerta .punto{background:var(--acento);border-color:var(--acento)}
+.tiempo b{display:block}
+.tiempo small{color:var(--suave)}
+
+/* Paneles */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:var(--papel);border:1px solid var(--borde);border-radius:var(--r);padding:16px}
+.kpi span{font-size:.8rem;color:var(--suave)}
+.kpi strong{display:block;font-family:Fraunces,Georgia,serif;font-size:1.6rem;margin-top:2px}
+.kpi.destacado{background:var(--pri);border-color:var(--pri);color:#fff}
+.kpi.destacado span{color:#d8d4ea}
+.tabla-env{background:var(--papel);border:1px solid var(--borde);border-radius:var(--r);overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);padding:12px 14px;border-bottom:1px solid var(--borde);background:#fbfaf7}
+td{padding:12px 14px;border-bottom:1px solid var(--borde);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+.barras{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px}
+.barras div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.barras i{display:block;width:100%;max-width:44px;background:var(--pri);border-radius:6px 6px 0 0}
+.barras i.ult{background:var(--acento)}
+.barras small{color:var(--suave);font-size:.75rem}
+.pasos-form{display:flex;gap:8px;margin-bottom:18px}
+.pasos-form div{flex:1;padding:10px 12px;border-radius:10px;background:#efece4;color:var(--suave);font-weight:600;font-size:.88rem}
+.pasos-form div.on{background:var(--pri);color:#fff}
+.pasos-form div.hecho{background:var(--pri-c);color:var(--pri)}
+.subida{display:grid;place-items:center;gap:4px;text-align:center;padding:24px;border:2px dashed var(--borde);border-radius:var(--r);background:#fbfaf7;cursor:pointer;color:var(--suave)}
+.subida:hover{border-color:var(--pri)}
+.subida.lista{border-style:solid;border-color:var(--ok);background:var(--ok-c);color:var(--ok)}
+.evid{display:flex;gap:10px;flex-wrap:wrap}
+.evid .arte{width:110px;aspect-ratio:1/1;border-radius:10px}
+
+/* Auth */
+.auth{max-width:440px;margin:32px auto}
+.auth .tarjeta{padding:28px}
+.perfiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.perfil-op{border:1px solid var(--borde);border-radius:10px;padding:14px;cursor:pointer;display:block;margin:0;font-weight:400}
+.perfil-op:has(input:checked){border-color:var(--pri);background:var(--pri-c)}
+.perfil-op input{display:none}
+.perfil-op b{display:block}
+
+/* Modal y avisos */
+.capa{position:fixed;inset:0;background:rgba(31,27,46,.5);display:grid;place-items:center;z-index:40;padding:16px}
+.modal{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:24px;max-height:90vh;overflow:auto}
+.modal-cab{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cerrar{border:0;background:transparent;font-size:1.4rem;cursor:pointer;color:var(--suave)}
+.estrellas-sel{display:flex;gap:6px;font-size:2rem}
+.estrellas-sel button{border:0;background:transparent;cursor:pointer;color:#d6d1c4;padding:0}
+.estrellas-sel button.on{color:var(--acento)}
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:12px 18px;border-radius:10px;z-index:50;box-shadow:0 8px 30px rgba(0,0,0,.25);font-weight:500;max-width:90vw}
+.comprobante{border:1px solid var(--borde);border-radius:10px;padding:18px;font-size:.9rem;background:#fffdf8}
+.comprobante h3{font-family:Inter,sans-serif;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em}
+
+@media (max-width:860px){
+  .heroe,.catalogo,.detalle,.dos-col{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .pegajoso{position:static}
+  .filtros{display:flex;gap:6px;overflow:auto}
+  .filtros h3,.filtros .solo-escritorio{display:none}
+  .filtro-op{white-space:nowrap;width:auto;border:1px solid var(--borde);background:#fff}
+}
+@media (max-width:560px){
+  .fila,.perfiles{grid-template-columns:1fr}
+  .heroe{padding:22px}
+  .top-der .texto{display:none}
+  .rol span{display:none}
+  .rol button{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in" id="barra"></div></header>
+<main class="contenedor" id="app"></main>
+<div class="rol" role="group" aria-label="Ver el prototipo como">
+  <span>Ver como</span>
+  <button data-rol="cliente">Cliente</button>
+  <button data-rol="emprendedor">Emprendedor</button>
+  <button data-rol="admin">Administrador</button>
+</div>
+<div id="capa"></div>
+
+<script>
+/* =====================================================================
+   Prototipo clicable de Tienda_EmprendeCol.
+   Todo es simulado en memoria: recargar la página reinicia los datos.
+   ===================================================================== */
+const COMISION = 8;
+const fmt = n => '$ ' + Math.round(n).toLocaleString('es-CO');
+const final = base => Math.round(base * (1 + COMISION / 100));
+
+const ICONOS = {
+  alimentos: '<path d="M14 20h28v14a12 12 0 0 1-12 12h-4a12 12 0 0 1-12-12z"/><path d="M42 24h4a6 6 0 0 1 0 12h-4"/><path d="M20 8c0 4 4 4 4 8M28 8c0 4 4 4 4 8"/>',
+  artesanias: '<path d="M22 6h16v6l6 10v14a10 10 0 0 1-10 10h-8a10 10 0 0 1-10-10V22l6-10z"/><path d="M16 30h28"/>',
+  ropa: '<path d="M20 8l-12 8 6 10 4-3v25h24V23l4 3 6-10-12-8c-2 4-6 6-10 6s-8-2-10-6z"/>',
+  belleza: '<rect x="18" y="20" width="24" height="28" rx="6"/><path d="M24 20v-8h12v8M30 4v8"/>',
+  foto: '<rect x="8" y="10" width="44" height="36" rx="5"/><circle cx="22" cy="23" r="4"/><path d="M10 42l14-12 9 8 7-6 10 9"/>',
+  hogar: '<path d="M8 28L30 10l22 18"/><path d="M14 24v24h32V24"/><path d="M26 48V34h8v14"/>',
+};
+const CATEGORIAS = [
+  { id: 'alimentos', nombre: 'Alimentos y bebidas', color: '#7a4a2b' },
+  { id: 'artesanias', nombre: 'Artesanías', color: '#b2593a' },
+  { id: 'ropa', nombre: 'Ropa y accesorios', color: '#3d6b6b' },
+  { id: 'belleza', nombre: 'Belleza y cuidado', color: '#6f7d3a' },
+  { id: 'hogar', nombre: 'Hogar y decoración', color: '#5a4b8a' },
+];
+const cat = id => CATEGORIAS.find(c => c.id === id);
+
+const EMPRENDEDORES = [
+  { id: 1, nombre: 'Café de la Montaña', ciudad: 'Medellín', color: '#7a4a2b', rating: 4.8, resenas: 36, verificado: true, desde: '2025',
+    desc: 'Café de origen cultivado por familias del suroeste antioqueño. Tostamos cada semana en pequeños lotes.' },
+  { id: 2, nombre: 'Manos de Barro', ciudad: 'El Carmen de Viboral', color: '#b2593a', rating: 4.6, resenas: 21, verificado: true, desde: '2025',
+    desc: 'Cerámica pintada a mano por artesanas del oriente antioqueño.' },
+  { id: 3, nombre: 'Hilo Paisa', ciudad: 'Envigado', color: '#3d6b6b', rating: 4.2, resenas: 9, verificado: false, desde: '2026',
+    desc: 'Prendas tejidas a mano en lana y algodón.' },
+  { id: 4, nombre: 'Raíz Botánica', ciudad: 'Bello', color: '#6f7d3a', rating: 4.9, resenas: 14, verificado: true, desde: '2026',
+    desc: 'Jabones y cosmética natural con plantas cultivadas en Antioquia.' },
+];
+const emp = id => EMPRENDEDORES.find(e => e.id === id);
+
+const PRODUCTOS = [
+  { id: 1, emp: 1, cat: 'alimentos', nombre: 'Café especial 500 g', base: 32000, stock: 40, tono: '#e9d8c4', desc: 'Tostión media con notas de panela y chocolate. Elige molido o en grano.' },
+  { id: 2, emp: 1, cat: 'alimentos', nombre: 'Café especial 250 g', base: 18000, stock: 25, tono: '#efe1d0', desc: 'La presentación pequeña de nuestro café de origen.' },
+  { id: 3, emp: 1, cat: 'hogar', nombre: 'Kit de filtrado V60', base: 95000, stock: 6, tono: '#e4e0f2', desc: 'Gotero, 40 filtros y jarra de vidrio para preparar café de filtro en casa.' },
+  { id: 4, emp: 2, cat: 'artesanias', nombre: 'Taza de cerámica pintada', base: 28000, stock: 15, tono: '#f3ddd2', desc: 'Taza de 300 ml pintada a mano con motivos florales. Apta para lavavajillas.' },
+  { id: 5, emp: 2, cat: 'hogar', nombre: 'Jarrón mediano', base: 64000, stock: 4, tono: '#efe0cf', desc: 'Jarrón de 25 cm esmaltado en tonos tierra.' },
+  { id: 6, emp: 2, cat: 'artesanias', nombre: 'Juego de platos x4', base: 120000, stock: 0, tono: '#f1e4da', desc: 'Cuatro platos llanos pintados a mano.' },
+  { id: 7, emp: 3, cat: 'ropa', nombre: 'Ruana de lana', base: 145000, stock: 5, tono: '#d8e6e3', desc: 'Ruana tejida en telar con lana de oveja. Talla única.' },
+  { id: 8, emp: 3, cat: 'ropa', nombre: 'Gorro tejido', base: 38000, stock: 12, tono: '#dde9e6', desc: 'Gorro en lana suave, colores variados.' },
+  { id: 9, emp: 4, cat: 'belleza', nombre: 'Jabón de caléndula', base: 14000, stock: 60, tono: '#e8ecd2', desc: 'Jabón artesanal para piel sensible. 110 g.' },
+  { id: 10, emp: 4, cat: 'belleza', nombre: 'Kit cuidado facial', base: 68000, stock: 8, tono: '#e4ead0', desc: 'Jabón, tónico de romero y bálsamo labial.' },
+  { id: 11, emp: 4, cat: 'belleza', nombre: 'Bálsamo labial', base: 12000, stock: 30, tono: '#edf0dc', desc: 'Con cera de abejas y aceite de coco.' },
+  { id: 12, emp: 2, cat: 'hogar', nombre: 'Portavelas de barro', base: 22000, stock: 18, tono: '#f2e2d6', desc: 'Juego de 2 portavelas calados a mano.' },
+];
+const prod = id => PRODUCTOS.find(p => p.id === id);
+
+/* Estado de la sesión simulada */
+const S = {
+  rol: 'cliente',
+  sesion: true,
+  carrito: [{ prod: 1, cant: 2 }, { prod: 9, cant: 3 }],
+  filtroCat: null, buscar: '', orden: 'relevancia',
+  pedidos: [
+    { id: 1031, emp: 4, items: [{ prod: 10, cant: 1 }], envio: 9000, estado: 'pagado', fecha: '06 oct 2026', limite: '11 oct 2026', pago: 'retenido' },
+    { id: 1024, emp: 1, items: [{ prod: 1, cant: 1 }, { prod: 3, cant: 1 }], envio: 12000, estado: 'entregado', fecha: '28 sep 2026',
+      despacho: { transportadora: 'Servientrega', guia: '2093 4471 8820', fecha: '30 sep 2026', entrega: '03 oct 2026' }, pago: 'retenido', autoConfirma: '10 oct 2026' },
+    { id: 1019, emp: 2, items: [{ prod: 4, cant: 2 }], envio: 10000, estado: 'recibido', fecha: '15 sep 2026',
+      despacho: { transportadora: 'Interrapidísimo', guia: '7001 2289 334', fecha: '16 sep 2026', entrega: '19 sep 2026' }, pago: 'liberado', resena: null },
+  ],
+  ventas: [
+    { id: 1035, cliente: 'Juan Pérez', ciudad: 'Itagüí', items: [{ prod: 2, cant: 2 }], envio: 9000, estado: 'pagado', fecha: '07 oct 2026', limite: '12 oct 2026', pago: 'retenido' },
+    { id: 1024, cliente: 'Camila Ruiz', ciudad: 'Bello', items: [{ prod: 1, cant: 1 }, { prod: 3, cant: 1 }], envio: 12000, estado: 'entregado', fecha: '28 sep 2026', pago: 'retenido',
+      despacho: { transportadora: 'Servientrega', guia: '2093 4471 8820', fecha: '30 sep 2026' } },
+    { id: 1012, cliente: 'Sofía Mejía', ciudad: 'Medellín', items: [{ prod: 1, cant: 3 }], envio: 9000, estado: 'recibido', fecha: '10 sep 2026', pago: 'liberado',
+      despacho: { transportadora: 'Coordinadora', guia: '55 018 9932', fecha: '11 sep 2026' } },
+  ],
+  reportes: [
+    { id: 8, pedido: 998, cliente: 'Andrés Gil', emp: 3, motivo: 'No recibí el producto', fecha: '04 oct 2026', estado: 'abierto', monto: 165240,
+      desc: 'Pagué una ruana el 20 de septiembre. El vendedor marcó despachado pero la guía no aparece en la transportadora y no responde mensajes.',
+      respuesta: 'Despachamos el 22 de septiembre, adjunto la guía. Puede que la transportadora tenga un error.', guia: 'Envía · 9910 2231', evidencias: 2, antecedentes: 1 },
+    { id: 7, pedido: 1002, cliente: 'Natalia Ospina', emp: 2, motivo: 'Producto dañado', fecha: '01 oct 2026', estado: 'en_revision', monto: 69120,
+      desc: 'El jarrón llegó roto. Adjunto fotos del empaque y del producto.', respuesta: 'Ofrecemos reenviar uno nuevo sin costo.', guia: 'Servientrega · 2088 1103', evidencias: 3, antecedentes: 0 },
+    { id: 5, pedido: 975, cliente: 'Mateo Rojas', emp: 4, motivo: 'Producto distinto', fecha: '20 sep 2026', estado: 'resuelto', resolucion: 'desestimado', monto: 30240,
+      desc: 'El jabón no era el de la foto.', respuesta: 'Es el mismo producto con otra etiqueta.', guia: 'Coordinadora · 44 220', evidencias: 1, antecedentes: 0 },
+  ],
+  usuarios: [
+    { nombre: 'Camila Ruiz', correo: 'camila@correo.co', perfil: 'Cliente', estado: 'activo' },
+    { nombre: 'Laura Gómez', correo: 'laura@correo.co', perfil: 'Emprendedora · Café de la Montaña', estado: 'activo' },
+    { nombre: 'Andrés Restrepo', correo: 'andres@correo.co', perfil: 'Emprendedor · Manos de Barro', estado: 'activo' },
+    { nombre: 'Julián Vélez', correo: 'julian@correo.co', perfil: 'Emprendedor · Hilo Paisa', estado: 'advertido' },
+    { nombre: 'Paola Cano', correo: 'paola@correo.co', perfil: 'Emprendedora · Raíz Botánica', estado: 'activo' },
+    { nombre: 'Carlos Duque', correo: 'cduque@correo.co', perfil: 'Cliente', estado: 'suspendido' },
+  ],
+  config: { comision: 8, despacho: 5, confirmacion: 7, reportar: 15 },
+  nuevoProd: { paso: 1 },
+};
+
+/* ---------- utilidades de interfaz ---------- */
+const svgIco = (k, color) => `<svg viewBox="0 0 60 56" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${ICONOS[k]}</svg>`;
+const arte = (p, extra = '') => `<div class="arte" style="background:${p.tono}">${svgIco(p.cat, cat(p.cat).color)}${p.stock === 0 && extra !== 'sin-badge' ? '<span class="badge b-gris agotado">Agotado</span>' : ''}</div>`;
+const logo = (e, t = 48) => `<div class="logo" style="background:${e.color};width:${t}px;height:${t}px">${e.nombre[0]}</div>`;
+const estrellas = r => '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r));
+const ico = {
+  escudo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>',
+  alerta: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></svg>',
+  carrito: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.5 11h11L21 8H6.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>',
+  check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>',
+  campana: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>',
+};
+const ESTADO_PEDIDO = {
+  pendiente_pago: ['Pendiente de pago', 'b-gris'], pagado: ['Pagado · por despachar', 'b-info'], despachado: ['Despachado', 'b-pri'],
+  entregado: ['Entregado', 'b-acento'], en_disputa: ['En disputa', 'b-mal'], recibido: ['Recibido', 'b-ok'],
+  cancelado: ['Cancelado', 'b-gris'], reembolsado: ['Reembolsado', 'b-gris'],
+};
+const ESTADO_PAGO = { retenido: ['Retenido en custodia', 'b-info'], congelado: ['Congelado', 'b-mal'], liberado: ['Liberado', 'b-ok'], reembolsado: ['Reembolsado', 'b-gris'] };
+const badge = ([t, c]) => `<span class="badge ${c}">${t}</span>`;
+const subtotal = items => items.reduce((s, i) => s + prod(i.prod).base * i.cant, 0);
+const totalesPedido = o => { const sub = subtotal(o.items); const com = Math.round(sub * COMISION / 100); return { sub, com, total: sub + com + o.envio, emprendedor: sub + o.envio }; };
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+  document.body.append(t); setTimeout(() => t.remove(), 3200);
+}
+function modal(html) {
+  document.getElementById('capa').innerHTML = `<div class="capa" onclick="if(event.target===this)cerrarModal()"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`;
+}
+function cerrarModal() { document.getElementById('capa').innerHTML = ''; }
+const ir = r => { location.hash = r; };
+
+/* ---------- barra superior según el rol ---------- */
+function barra() {
+  const r = location.hash || '#/';
+  // h: destino; extra: otras rutas (prefijos) que también marcan el enlace como activo
+  const enlace = (h, t, extra = []) => `<a href="${h}" class="${r === h || extra.some(x => r.startsWith(x)) ? 'activo' : ''}">${t}</a>`;
+  let nav = '', der = '';
+  if (!S.sesion) {
+    nav = enlace('#/', 'Catálogo');
+    der = `<a class="btn btn-sm" href="#/login">Iniciar sesión</a><a class="btn btn-sm btn-a" href="#/registro">Crear cuenta</a>`;
+  } else if (S.rol === 'cliente') {
+    nav = enlace('#/', 'Catálogo', ['#/producto/', '#/emprendedor/']) + enlace('#/pedidos', 'Mis pedidos', ['#/pedido/', '#/reportar/']);
+    const n = S.carrito.reduce((s, i) => s + i.cant, 0);
+    der = `<a class="icono-btn" href="#/carrito" aria-label="Carrito, ${n} productos">${ico.carrito}${n ? `<span class="contador">${n}</span>` : ''}<span class="texto">Carrito</span></a>
+           <button class="icono-btn" style="background:none;border:0;cursor:pointer" onclick="cerrarSesion()" title="Cerrar sesión"><span class="avatar">CR</span></button>`;
+  } else if (S.rol === 'emprendedor') {
+    nav = enlace('#/emp', 'Panel') + enlace('#/emp/pedidos', 'Pedidos', ['#/emp/despacho/']) + enlace('#/emp/productos', 'Mis productos', ['#/emp/nuevo']) + enlace('#/emprendedor/1', 'Mi tienda pública');
+    der = `<span class="icono-btn">${ico.campana}<span class="contador">1</span></span><span class="avatar" title="Laura Gómez">LG</span>`;
+  } else {
+    nav = enlace('#/admin', 'Panel') + enlace('#/admin/reportes', 'Reportes', ['#/admin/reporte/']) + enlace('#/admin/usuarios', 'Usuarios') + enlace('#/admin/config', 'Configuración');
+    der = `<span class="avatar" title="Administrador">AD</span>`;
+  }
+  document.getElementById('barra').innerHTML =
+    `<a class="marca" href="${S.rol === 'emprendedor' ? '#/emp' : S.rol === 'admin' ? '#/admin' : '#/'}"><span class="sello">E</span>EmprendeCol</a>
+     <nav class="nav">${nav}</nav><div class="top-der">${der}</div>`;
+  document.querySelectorAll('.rol button').forEach(b => b.classList.toggle('on', b.dataset.rol === S.rol));
+}
+function cerrarSesion() { S.sesion = false; toast('Cerraste sesión.'); ir('#/'); }
+
+/* =====================================================================
+   PANTALLAS · CLIENTE
+   ===================================================================== */
+function vCatalogo() {
+  let lista = PRODUCTOS.filter(p => (!S.filtroCat || p.cat === S.filtroCat) &&
+    (!S.buscar || (p.nombre + ' ' + emp(p.emp).nombre).toLowerCase().includes(S.buscar.toLowerCase())));
+  if (S.orden === 'menor') lista = [...lista].sort((a, b) => a.base - b.base);
+  if (S.orden === 'mayor') lista = [...lista].sort((a, b) => b.base - a.base);
+  return `
+  <section class="heroe">
+    <div>
+      <h1>Compra a emprendedores colombianos sin miedo a perder tu plata</h1>
+      <p>Tu pago queda guardado hasta que confirmes que el pedido llegó.</p>
+      <form class="buscador" onsubmit="event.preventDefault();S.buscar=this.q.value;render()">
+        <input name="q" value="${S.buscar}" placeholder="Busca café, cerámica, jabones…" aria-label="Buscar productos">
+        <button class="btn btn-p">Buscar</button>
+      </form>
+    </div>
+    <div class="pasos-confianza">
+      <div><b>1</b>Pagas y tu dinero queda en custodia</div>
+      <div><b>2</b>El emprendedor despacha con guía y foto</div>
+      <div><b>3</b>Confirmas que llegó y se libera el pago</div>
+    </div>
+  </section>
+  <div class="catalogo">
+    <aside class="filtros">
+      <h3>Categorías</h3>
+      <button class="filtro-op ${!S.filtroCat ? 'on' : ''}" onclick="S.filtroCat=null;render()">Todas <span>${PRODUCTOS.length}</span></button>
+      ${CATEGORIAS.map(c => `<button class="filtro-op ${S.filtroCat === c.id ? 'on' : ''}" onclick="S.filtroCat='${c.id}';render()">${c.nombre} <span>${PRODUCTOS.filter(p => p.cat === c.id).length}</span></button>`).join('')}
+      <h3>Emprendedores</h3>
+      ${EMPRENDEDORES.map(e => `<a class="filtro-op solo-escritorio" style="text-decoration:none" href="#/emprendedor/${e.id}">${e.nombre}</a>`).join('')}
+    </aside>
+    <section>
+      <div class="cabecera" style="margin-bottom:14px;align-items:center">
+        <p class="muted" style="margin:0">${lista.length} producto(s)${S.buscar ? ` para «${S.buscar}» · <a href="#" onclick="event.preventDefault();S.buscar='';render()">quitar búsqueda</a>` : ''}</p>
+        <select style="width:auto" onchange="S.orden=this.value;render()" aria-label="Ordenar">
+          <option value="relevancia" ${S.orden === 'relevancia' ? 'selected' : ''}>Más relevantes</option>
+          <option value="menor" ${S.orden === 'menor' ? 'selected' : ''}>Precio: menor a mayor</option>
+          <option value="mayor" ${S.orden === 'mayor' ? 'selected' : ''}>Precio: mayor a menor</option>
+        </select>
+      </div>
+      ${lista.length ? `<div class="rejilla">${lista.map(tarjetaProd).join('')}</div>`
+        : `<div class="vacio"><h2>No encontramos productos</h2><p class="muted">Prueba con otra palabra o quita los filtros.</p></div>`}
+    </section>
+  </div>`;
+}
+function tarjetaProd(p) {
+  const e = emp(p.emp);
+  return `<a class="prod" href="#/producto/${p.id}">${arte(p)}
+    <div class="prod-cuerpo"><span class="prod-nombre">${p.nombre}</span>
+    <span class="prod-precio">${fmt(final(p.base))}</span>
+    <span class="prod-emp">${e.nombre} · <span class="estrellas">★</span> ${e.rating}</span></div></a>`;
+}
+
+let cantDetalle = 1;
+function vProducto(id) {
+  const p = prod(+id); if (!p) return vNoExiste();
+  const e = emp(p.emp);
+  const otros = PRODUCTOS.filter(x => x.emp === p.emp && x.id !== p.id).slice(0, 4);
+  return `
+  <p class="sobre"><a href="#/">← Catálogo</a> · ${cat(p.cat).nombre}</p>
+  <div class="detalle" style="margin-top:12px">
+    <div>
+      ${arte(p)}
+      <div class="miniaturas">${[0, 1, 2].map(i => `<div class="arte ${i === 0 ? 'on' : ''}" style="background:${p.tono};filter:hue-rotate(${i * 12}deg)">${svgIco(p.cat, cat(p.cat).color)}</div>`).join('')}</div>
+    </div>
+    <div>
+      <span class="chip">${cat(p.cat).nombre}</span>
+      <h1 style="margin-top:10px">${p.nombre}</h1>
+      <p class="precio-grande">${fmt(final(p.base))}</p>
+      <p class="muted peq">Incluye la comisión de la plataforma. El envío se calcula al pagar.</p>
+      <p>${p.desc}</p>
+      ${p.stock > 0 ? `
+        <p class="peq ${p.stock <= 5 ? '' : 'muted'}" style="${p.stock <= 5 ? 'color:#9a5410;font-weight:600' : ''}">${p.stock <= 5 ? `¡Solo quedan ${p.stock}!` : `${p.stock} disponibles`}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0">
+          <div class="cantidad"><button aria-label="Quitar uno" onclick="cantDetalle=Math.max(1,cantDetalle-1);render()">−</button><span>${cantDetalle}</span><button aria-label="Agregar uno" onclick="cantDetalle=Math.min(${p.stock},cantDetalle+1);render()">+</button></div>
+          <button class="btn btn-p" style="flex:1" onclick="agregar(${p.id})">Agregar al carrito</button>
+        </div>` : `<div class="aviso alerta" style="margin:14px 0">${ico.info}<div>Este producto está agotado por ahora.</div></div>`}
+      <div class="aviso" style="margin:16px 0">${ico.escudo}<div><b>Compra protegida.</b> El emprendedor recibe tu pago solo cuando confirmas que el pedido llegó. Si no llega, puedes reportarlo y te devolvemos el dinero.</div></div>
+      <a class="tarjeta emp-mini" href="#/emprendedor/${e.id}" style="padding:14px">
+        ${logo(e)}<div><b>${e.nombre}</b> ${e.verificado ? '<span class="badge b-ok">Verificado</span>' : ''}<br>
+        <span class="peq muted"><span class="estrellas">${estrellas(e.rating)}</span> ${e.rating} · ${e.resenas} reseñas · ${e.ciudad}</span></div>
+      </a>
+    </div>
+  </div>
+  ${otros.length ? `<h2 style="margin-top:32px">Más de ${e.nombre}</h2><div class="rejilla">${otros.map(tarjetaProd).join('')}</div>` : ''}`;
+}
+function agregar(id) {
+  if (!S.sesion) { toast('Inicia sesión para comprar.'); return ir('#/login'); }
+  const it = S.carrito.find(i => i.prod === id);
+  if (it) it.cant += cantDetalle; else S.carrito.push({ prod: id, cant: cantDetalle });
+  toast(`Agregaste ${cantDetalle} × ${prod(id).nombre} al carrito.`); cantDetalle = 1; render();
+}
+
+function vEmprendedor(id) {
+  const e = emp(+id); if (!e) return vNoExiste();
+  const lista = PRODUCTOS.filter(p => p.emp === e.id);
+  return `
+  <p class="sobre"><a href="#/">← Catálogo</a></p>
+  <section class="tarjeta" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:12px 0 24px">
+    ${logo(e, 84)}
+    <div style="flex:1;min-width:240px">
+      <h1>${e.nombre} ${e.verificado ? '<span class="badge b-ok" style="vertical-align:middle;font-family:Inter">Verificado</span>' : ''}</h1>
+      <p class="muted" style="margin:6px 0">${e.ciudad} · En EmprendeCol desde ${e.desde}</p>
+      <p style="margin:0">${e.desc}</p>
+    </div>
+    <div style="text-align:center"><div class="serif" style="font-size:2rem">${e.rating}</div><div class="estrellas">${estrellas(e.rating)}</div><div class="peq muted">${e.resenas} reseñas</div></div>
+  </section>
+  <h2>Productos (${lista.length})</h2>
+  <div class="rejilla">${lista.map(tarjetaProd).join('')}</div>
+  <h2 style="margin-top:28px">Lo que dicen sus clientes</h2>
+  <div class="rejilla" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">
+    ${[['Sofía M.', 5, 'Llegó rápido y muy bien empacado. Repetiría.'], ['Juan P.', 5, 'Excelente calidad, tal cual las fotos.'], ['Natalia O.', 4, 'Muy bueno, el envío tardó un día más de lo esperado.']]
+      .map(([n, r, t]) => `<div class="tarjeta"><span class="estrellas">${estrellas(r)}</span><p style="margin:6px 0">${t}</p><span class="peq muted">${n} · compra verificada</span></div>`).join('')}
+  </div>`;
+}
+
+function gruposCarrito() {
+  const g = {};
+  S.carrito.forEach(i => { const p = prod(i.prod); (g[p.emp] = g[p.emp] || []).push(i); });
+  return Object.entries(g).map(([e, items]) => ({ emp: emp(+e), items, envio: 9000 + (+e % 2) * 3000 }));
+}
+function vCarrito() {
+  if (!S.carrito.length) return `<h1>Tu carrito</h1><div class="vacio" style="margin-top:20px"><h2>Tu carrito está vacío</h2><p class="muted">Descubre productos de emprendedores colombianos.</p><a class="btn btn-p" href="#/">Ir al catálogo</a></div>`;
+  const grupos = gruposCarrito();
+  const sub = grupos.reduce((s, g) => s + g.items.reduce((a, i) => a + final(prod(i.prod).base) * i.cant, 0), 0);
+  const envio = grupos.reduce((s, g) => s + g.envio, 0);
+  return `
+  <div class="cabecera"><div><p class="sobre"><a href="#/">← Seguir comprando</a></p><h1>Tu carrito</h1></div></div>
+  <div class="dos-col">
+    <div>
+      ${grupos.length > 1 ? `<div class="aviso info" style="margin-bottom:16px">${ico.info}<div>Tu compra se dividirá en <b>${grupos.length} pedidos</b>, uno por emprendedor. Cada uno se despacha y se confirma por separado.</div></div>` : ''}
+      ${grupos.map((g, n) => `
+        <div class="tarjeta grupo">
+          <div class="grupo-cab"><div class="emp-mini">${logo(g.emp, 36)}<div><b>Pedido ${n + 1}: ${g.emp.nombre}</b><br><span class="peq muted">Envío desde ${g.emp.ciudad} · ${fmt(g.envio)}</span></div></div></div>
+          ${g.items.map(i => { const p = prod(i.prod); return `
+            <div class="item">${arte(p, 'sin-badge')}
+              <div><b>${p.nombre}</b><br><span class="peq muted">${fmt(final(p.base))} c/u</span>
+                <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
+                  <div class="cantidad"><button aria-label="Quitar uno" onclick="cambiarCant(${p.id},-1)">−</button><span>${i.cant}</span><button aria-label="Agregar uno" onclick="cambiarCant(${p.id},1)">+</button></div>
+                  <button class="btn btn-sm btn-mal" style="border:0" onclick="cambiarCant(${p.id},-999)">Quitar</button>
+                </div></div>
+              <b class="num">${fmt(final(p.base) * i.cant)}</b></div>`; }).join('')}
+        </div>`).join('')}
+    </div>
+    <aside class="tarjeta pegajoso">
+      <h2>Resumen</h2>
+      <div class="linea"><span>Productos</span><span class="num">${fmt(sub)}</span></div>
+      <div class="linea"><span>Envíos (${grupos.length})</span><span class="num">${fmt(envio)}</span></div>
+      <div class="linea total"><span>Total</span><span class="num">${fmt(sub + envio)}</span></div>
+      <button class="btn btn-p btn-bloque" style="margin-top:14px" onclick="ir('#/checkout')">Continuar al pago</button>
+      <p class="peq muted" style="margin:12px 0 0;display:flex;gap:8px">${ico.escudo}<span>El pago queda en custodia hasta que confirmes la recepción.</span></p>
+    </aside>
+  </div>`;
+}
+function cambiarCant(id, d) {
+  const it = S.carrito.find(i => i.prod === id); if (!it) return;
+  it.cant += d; if (it.cant <= 0) S.carrito = S.carrito.filter(i => i !== it);
+  render();
+}
+
+function vCheckout() {
+  if (!S.carrito.length) { setTimeout(() => ir('#/carrito')); return ''; }
+  const grupos = gruposCarrito();
+  const total = grupos.reduce((s, g) => s + g.envio + g.items.reduce((a, i) => a + final(prod(i.prod).base) * i.cant, 0), 0);
+  return `
+  <div class="cabecera"><div><p class="sobre"><a href="#/carrito">← Volver al carrito</a></p><h1>Pago</h1></div></div>
+  <div class="dos-col">
+    <form class="tarjeta" id="form-pago" onsubmit="event.preventDefault();pagar()">
+      <h2>1. Dirección de envío</h2>
+      <label class="opcion-pago"><input type="radio" name="dir" checked><div><b>Casa</b> · Camila Ruiz · 302 777 8899<br><span class="peq muted">Calle 50 # 45-20, Apto 301 · Bello, Antioquia</span></div></label>
+      <label class="opcion-pago"><input type="radio" name="dir"><div><b>+ Agregar otra dirección</b></div></label>
+      <hr class="sep">
+      <h2>2. Medio de pago</h2>
+      <label class="opcion-pago"><input type="radio" name="pago" checked> PSE · débito desde tu banco</label>
+      <label class="opcion-pago"><input type="radio" name="pago"> Tarjeta de crédito o débito</label>
+      <label class="opcion-pago"><input type="radio" name="pago"> Nequi</label>
+      <p class="peq muted">Serás redirigido a la pasarela de pagos. EmprendeCol nunca guarda los datos de tu tarjeta.</p>
+      <div class="aviso" style="margin:14px 0">${ico.escudo}<div><b>Así te protegemos:</b> tu dinero queda retenido. Cada emprendedor tiene ${S.config.despacho} días para despachar con guía y foto; si no lo hace, puedes cancelar y te devolvemos el pago.</div></div>
+      <button class="btn btn-p btn-bloque">Pagar ${fmt(total)}</button>
+    </form>
+    <aside class="tarjeta pegajoso">
+      <h2>Tus pedidos</h2>
+      ${grupos.map(g => {
+        const s = g.items.reduce((a, i) => a + prod(i.prod).base * i.cant, 0);
+        const c = g.items.reduce((a, i) => a + (final(prod(i.prod).base) - prod(i.prod).base) * i.cant, 0);
+        return `<div style="margin-bottom:12px"><b>${g.emp.nombre}</b>
+          <div class="linea peq"><span>Productos</span><span class="num">${fmt(s)}</span></div>
+          <div class="linea peq"><span>Comisión plataforma (${COMISION} %)</span><span class="num">${fmt(c)}</span></div>
+          <div class="linea peq"><span>Envío</span><span class="num">${fmt(g.envio)}</span></div></div>`; }).join('<hr class="sep">')}
+      <div class="linea total"><span>Total</span><span class="num">${fmt(total)}</span></div>
+    </aside>
+  </div>`;
+}
+let ultimosPedidos = [];
+function pagar() {
+  const grupos = gruposCarrito();
+  let id = Math.max(...S.pedidos.map(p => p.id)) + 10;
+  ultimosPedidos = grupos.map(g => {
+    const o = { id: id++, emp: g.emp.id, items: g.items.map(i => ({ ...i })), envio: g.envio, estado: 'pagado', fecha: '08 oct 2026', limite: '13 oct 2026', pago: 'retenido' };
+    S.pedidos.unshift(o); return o;
+  });
+  S.carrito = [];
+  ir('#/confirmado');
+}
+function vConfirmado() {
+  return `<div class="auth" style="max-width:560px"><div class="tarjeta" style="text-align:center">
+    <div style="width:64px;height:64px;border-radius:50%;background:var(--ok-c);color:var(--ok);display:grid;place-items:center;margin:0 auto 12px">${ico.escudo.replace(/20/g, '30')}</div>
+    <h1>¡Pago recibido!</h1>
+    <p class="muted" style="margin-top:8px">Tu dinero está en custodia. Te avisaremos cuando cada emprendedor despache.</p>
+    <div style="text-align:left;margin:18px 0">${ultimosPedidos.map(o => `<div class="linea"><span>Pedido #${o.id} · ${emp(o.emp).nombre}</span>${badge(ESTADO_PEDIDO.pagado)}</div>`).join('')}</div>
+    <a class="btn btn-p" href="#/pedidos">Ver mis pedidos</a> <a class="btn" href="#/">Seguir comprando</a>
+  </div></div>`;
+}
+
+function vPedidos() {
+  return `<div class="cabecera"><h1>Mis pedidos</h1></div>
+  <div class="lista-pedidos">${S.pedidos.map(o => {
+    const e = emp(o.emp), t = totalesPedido(o);
+    const accion = o.estado === 'entregado' ? '<span class="badge b-acento">Confirma la recepción</span>' : o.estado === 'recibido' && !o.resena ? '<span class="badge b-pri">Califica tu compra</span>' : '';
+    return `<a class="tarjeta pedido-fila" href="#/pedido/${o.id}">
+      <div class="emp-mini">${logo(e, 44)}<div><b>Pedido #${o.id}</b> · ${e.nombre}<br><span class="peq muted">${o.fecha} · ${o.items.reduce((s, i) => s + i.cant, 0)} producto(s) · ${fmt(t.total)}</span></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${accion}${badge(ESTADO_PEDIDO[o.estado])}</div></a>`;
+  }).join('')}</div>`;
+}
+
+function pasosPedido(o) {
+  const orden = ['pagado', 'despachado', 'entregado', 'recibido'];
+  let idx = orden.indexOf(o.estado); if (o.estado === 'en_disputa') idx = 2;
+  const d = o.despacho || {};
+  const pasos = [
+    ['Pago en custodia', `${o.fecha} · el emprendedor aún no recibe el dinero`],
+    ['Despachado', d.fecha ? `${d.fecha} · ${d.transportadora}, guía ${d.guia}` : `Plazo para despachar: hasta el ${o.limite}`],
+    ['Entregado', d.entrega ? `${d.entrega} según la transportadora` : 'Pendiente'],
+    ['Recepción confirmada', o.estado === 'recibido' ? 'Pago liberado al emprendedor' : o.autoConfirma ? `Se confirmará automáticamente el ${o.autoConfirma} si no reportas nada` : 'Pendiente'],
+  ];
+  return `<ul class="tiempo">${pasos.map(([t, s], i) => {
+    const cls = i <= idx ? (o.estado === 'en_disputa' && i === 2 ? 'alerta' : 'hecho') : i === idx + 1 ? 'actual' : '';
+    return `<li class="${cls}"><span class="punto">${cls === 'hecho' ? ico.check : ''}</span><b>${t}</b><small>${s}</small></li>`;
+  }).join('')}${o.estado === 'en_disputa' ? `<li class="alerta"><span class="punto"></span><b>Reporte en revisión</b><small>El pago está congelado hasta que un administrador resuelva.</small></li>` : ''}</ul>`;
+}
+function vPedido(id) {
+  const o = S.pedidos.find(p => p.id === +id); if (!o) return vNoExiste();
+  const e = emp(o.emp), t = totalesPedido(o);
+  let acciones = '';
+  if (o.estado === 'entregado') acciones = `
+    <div class="aviso alerta" style="margin-bottom:12px">${ico.info}<div>La transportadora reporta el pedido como entregado. ¿Te llegó bien?</div></div>
+    <button class="btn btn-ok btn-bloque" onclick="confirmarRecepcion(${o.id})">Sí, recibí mi pedido</button>
+    <a class="btn btn-mal btn-bloque" style="margin-top:8px" href="#/reportar/${o.id}">Tengo un problema con el pedido</a>`;
+  else if (o.estado === 'pagado' || o.estado === 'despachado') acciones = `
+    <p class="peq muted">Si el pedido no llega o hay un problema, puedes reportarlo.</p>
+    <a class="btn btn-mal btn-bloque" href="#/reportar/${o.id}">Reportar un problema</a>
+    ${o.estado === 'pagado' ? `<button class="btn btn-bloque" style="margin-top:8px" disabled title="Disponible si pasa el plazo sin despacho">Cancelar pedido (después del ${o.limite})</button>` : ''}`;
+  else if (o.estado === 'recibido') acciones = o.resena
+    ? `<p><b>Tu reseña</b><br><span class="estrellas">${estrellas(o.resena.r)}</span> ${o.resena.t || ''}</p>`
+    : `<button class="btn btn-p btn-bloque" onclick="abrirResena(${o.id})">Calificar a ${e.nombre}</button>`;
+  else if (o.estado === 'en_disputa') acciones = `<div class="aviso mal">${ico.alerta}<div>Reportaste este pedido. Te escribiremos cuando el administrador lo resuelva.</div></div>`;
+  return `
+  <div class="cabecera"><div><p class="sobre"><a href="#/pedidos">← Mis pedidos</a></p><h1>Pedido #${o.id}</h1></div>${badge(ESTADO_PEDIDO[o.estado])}</div>
+  <div class="dos-col">
+    <div style="display:grid;gap:16px">
+      <div class="tarjeta"><h2>Seguimiento</h2>${pasosPedido(o)}
+        ${o.despacho ? `<hr class="sep"><button class="btn btn-sm" onclick="verComprobante(${o.id})">Ver comprobante de despacho (PDF)</button>` : ''}</div>
+      <div class="tarjeta"><h2>Productos</h2>${o.items.map(i => { const p = prod(i.prod); return `<div class="item">${arte(p, 'sin-badge')}<div><b>${p.nombre}</b><br><span class="peq muted">${i.cant} × ${fmt(final(p.base))}</span></div><b class="num">${fmt(final(p.base) * i.cant)}</b></div>`; }).join('')}</div>
+    </div>
+    <aside style="display:grid;gap:16px" class="pegajoso">
+      <div class="tarjeta">${acciones}</div>
+      <div class="tarjeta">
+        <a class="emp-mini" href="#/emprendedor/${e.id}">${logo(e, 40)}<div><b>${e.nombre}</b><br><span class="peq muted">${e.ciudad}</span></div></a>
+        <hr class="sep">
+        <div class="linea peq"><span>Productos</span><span class="num">${fmt(t.sub)}</span></div>
+        <div class="linea peq"><span>Comisión plataforma</span><span class="num">${fmt(t.com)}</span></div>
+        <div class="linea peq"><span>Envío</span><span class="num">${fmt(o.envio)}</span></div>
+        <div class="linea total"><span>Total pagado</span><span class="num">${fmt(t.total)}</span></div>
+        <div class="linea peq" style="margin-top:8px"><span>Estado del pago</span>${badge(ESTADO_PAGO[o.pago])}</div>
+      </div>
+    </aside>
+  </div>`;
+}
+function confirmarRecepcion(id) {
+  const o = S.pedidos.find(p => p.id === id);
+  o.estado = 'recibido'; o.pago = 'liberado';
+  const v = S.ventas.find(p => p.id === id); if (v) { v.estado = 'recibido'; v.pago = 'liberado'; }
+  toast('¡Gracias! Liberamos el pago al emprendedor.'); render(); setTimeout(() => abrirResena(id), 600);
+}
+let resenaSel = 5;
+function abrirResena(id) {
+  const o = S.pedidos.find(p => p.id === id); resenaSel = 5;
+  modal(`<div class="modal-cab"><h2 style="margin:0">Califica a ${emp(o.emp).nombre}</h2><button class="cerrar" onclick="cerrarModal()" aria-label="Cerrar">×</button></div>
+    <p class="muted">Tu opinión ayuda a otros compradores a confiar en emprendimientos nuevos.</p>
+    <div class="estrellas-sel" id="est">${[1, 2, 3, 4, 5].map(n => `<button aria-label="${n} estrellas" class="on" onclick="selEstrella(${n})">★</button>`).join('')}</div>
+    <label for="com">Comentario (opcional)</label><textarea id="com" rows="3" placeholder="¿Cómo te fue con el producto y el envío?"></textarea>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px"><button class="btn" onclick="cerrarModal()">Más tarde</button><button class="btn btn-p" onclick="guardarResena(${id})">Publicar reseña</button></div>`);
+}
+function selEstrella(n) { resenaSel = n; document.querySelectorAll('#est button').forEach((b, i) => b.classList.toggle('on', i < n)); }
+function guardarResena(id) { const o = S.pedidos.find(p => p.id === id); o.resena = { r: resenaSel, t: document.getElementById('com').value }; cerrarModal(); toast('Publicaste tu reseña.'); render(); }
+
+let evidencias = 0;
+function vReportar(id) {
+  const o = S.pedidos.find(p => p.id === +id); if (!o) return vNoExiste();
+  evidencias = 0;
+  return `<div style="max-width:640px">
+  <p class="sobre"><a href="#/pedido/${o.id}">← Pedido #${o.id}</a></p><h1>Reportar un problema</h1>
+  <div class="aviso info" style="margin:16px 0">${ico.info}<div>Mientras revisamos tu reporte, <b>el pago queda congelado</b> y ${emp(o.emp).nombre} no lo recibe. Le pediremos su versión antes de decidir.</div></div>
+  <form class="tarjeta" onsubmit="event.preventDefault();enviarReporte(${o.id}, this)">
+    <label for="motivo">¿Qué pasó?</label>
+    <select id="motivo" required><option value="">Elige un motivo</option><option>No recibí el producto</option><option>Llegó un producto distinto</option><option>Llegó dañado</option><option>Creo que es una estafa</option><option>Otro</option></select>
+    <p class="peq" id="err-motivo" style="color:var(--mal);margin:4px 0 0;display:none">Elige un motivo para continuar.</p>
+    <label for="desc">Cuéntanos los detalles</label>
+    <textarea id="desc" rows="4" placeholder="Fechas, qué te dijo el emprendedor, estado del paquete…"></textarea>
+    <label>Evidencias (fotos, capturas de chat, etc.)</label>
+    <div class="subida" id="subida" onclick="evidencias++;this.classList.add('lista');this.innerHTML='<b>'+evidencias+' archivo(s) adjunto(s)</b><span class=peq>Toca para agregar más</span>'"><b>Toca para adjuntar archivos</b><span class="peq">JPG, PNG o PDF · máximo 5 MB cada uno</span></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px"><a class="btn" href="#/pedido/${o.id}">Cancelar</a><button class="btn btn-mal" style="background:var(--mal);color:#fff;border-color:var(--mal)">Enviar reporte</button></div>
+  </form></div>`;
+}
+function enviarReporte(id, f) {
+  if (!f.motivo.value) { document.getElementById('err-motivo').style.display = 'block'; f.motivo.focus(); return; }
+  const o = S.pedidos.find(p => p.id === id); o.estado = 'en_disputa'; o.pago = 'congelado';
+  S.reportes.unshift({ id: S.reportes[0].id + 1, pedido: id, cliente: 'Camila Ruiz', emp: o.emp, motivo: f.motivo.value, fecha: '08 oct 2026', estado: 'abierto',
+    monto: totalesPedido(o).total, desc: f.desc.value || '(sin descripción)', respuesta: null, guia: o.despacho ? `${o.despacho.transportadora} · ${o.despacho.guia}` : 'Sin despacho registrado', evidencias, antecedentes: 0 });
+  toast('Enviamos tu reporte. El pago quedó congelado.'); ir('#/pedido/' + id);
+}
+function verComprobante(id) {
+  const o = S.pedidos.find(p => p.id === id) || S.ventas.find(p => p.id === id);
+  const d = o.despacho, e = emp(o.emp || 1);
+  modal(`<div class="modal-cab"><h2 style="margin:0">Comprobante de despacho</h2><button class="cerrar" onclick="cerrarModal()" aria-label="Cerrar">×</button></div>
+    <div class="comprobante">
+      <div class="linea"><span class="marca" style="color:var(--tinta);font-size:1.1rem"><span class="sello" style="color:#fff">E</span>EmprendeCol</span><span class="peq muted">N.º CD-${o.id}</span></div>
+      <hr class="sep"><h3>Pedido #${o.id}</h3>
+      <div class="linea peq"><span>Vendedor</span><b>${e.nombre}</b></div>
+      <div class="linea peq"><span>Destinatario</span><b>${o.cliente || 'Camila Ruiz'}</b></div>
+      <div class="linea peq"><span>Transportadora</span><b>${d.transportadora}</b></div>
+      <div class="linea peq"><span>Número de guía</span><b>${d.guia}</b></div>
+      <div class="linea peq"><span>Fecha de despacho</span><b>${d.fecha}</b></div>
+      <hr class="sep"><h3>Evidencia</h3>
+      <div class="evid">${[0, 1].map(() => `<div class="arte" style="background:#efe7da">${svgIco('foto', '#9a8a70')}</div>`).join('')}</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="btn btn-p" onclick="toast('En la versión real se descarga el PDF.')">Descargar PDF</button></div>`);
+}
+
+/* =====================================================================
+   PANTALLAS · AUTENTICACIÓN
+   ===================================================================== */
+function vLogin() {
+  return `<div class="auth"><div class="tarjeta">
+    <h1>Inicia sesión</h1><p class="muted" style="margin-top:6px">Compra y vende con protección.</p>
+    <form onsubmit="event.preventDefault();S.sesion=true;toast('¡Hola de nuevo, Camila!');ir(S.rol==='cliente'?'#/':S.rol==='emprendedor'?'#/emp':'#/admin')">
+      <label for="correo">Correo</label><input id="correo" type="email" value="camila@correo.co" required>
+      <label for="clave">Contraseña</label><input id="clave" type="password" value="Demo1234" required>
+      <p class="peq" style="text-align:right;margin:8px 0 0"><a href="#/recuperar">¿Olvidaste tu contraseña?</a></p>
+      <button class="btn btn-p btn-bloque" style="margin-top:16px">Entrar</button>
+    </form>
+    <p class="peq muted" style="text-align:center;margin:16px 0 0">¿No tienes cuenta? <a href="#/registro">Créala gratis</a></p>
+  </div></div>`;
+}
+function vRecuperar() {
+  return `<div class="auth"><div class="tarjeta">
+    <h1>Recupera tu contraseña</h1><p class="muted" style="margin-top:6px">Te enviaremos un enlace que vence en 24 horas.</p>
+    <form onsubmit="event.preventDefault();toast('Si el correo existe, te enviamos el enlace.');ir('#/login')">
+      <label for="c">Correo</label><input id="c" type="email" required placeholder="tu@correo.co">
+      <button class="btn btn-p btn-bloque" style="margin-top:16px">Enviar enlace</button>
+    </form>
+    <p class="peq" style="text-align:center;margin:16px 0 0"><a href="#/login">Volver a iniciar sesión</a></p>
+  </div></div>`;
+}
+function vRegistro() {
+  return `<div class="auth"><div class="tarjeta">
+    <h1>Crea tu cuenta</h1><p class="muted" style="margin-top:6px">Es gratis. Después puedes activar el otro perfil.</p>
+    <form onsubmit="event.preventDefault();registrar(this)">
+      <label>¿Cómo vas a usar EmprendeCol?</label>
+      <div class="perfiles">
+        <label class="perfil-op"><input type="radio" name="perfil" value="cliente" checked><b>Quiero comprar</b><span class="peq muted">Apoya emprendimientos con tu pago protegido</span></label>
+        <label class="perfil-op"><input type="radio" name="perfil" value="emprendedor"><b>Quiero vender</b><span class="peq muted">Publica tu catálogo sin costos fijos</span></label>
+      </div>
+      <label for="n">Nombre completo</label><input id="n" required>
+      <label for="c">Correo</label><input id="c" type="email" required>
+      <label for="p">Contraseña</label><input id="p" type="password" minlength="8" required placeholder="Mínimo 8 caracteres">
+      <label class="check" style="margin-top:16px"><input type="checkbox" name="datos" required><span>Acepto la <a href="#" onclick="event.preventDefault()">política de tratamiento de datos</a> (Ley 1581 de 2012) y los términos de uso.</span></label>
+      <button class="btn btn-p btn-bloque" style="margin-top:16px">Crear cuenta</button>
+    </form>
+  </div></div>`;
+}
+function registrar(f) {
+  modal(`<div style="text-align:center"><h2>Revisa tu correo</h2><p class="muted">Enviamos un enlace de verificación a <b>${f.c.value}</b>. Vence en 24 horas.</p>
+    <button class="btn btn-p" onclick="cerrarModal();S.sesion=true;cambiarRol('${f.perfil.value}')">Simular clic en el enlace</button></div>`);
+}
+
+/* =====================================================================
+   PANTALLAS · EMPRENDEDOR (Café de la Montaña)
+   ===================================================================== */
+function vEmpPanel() {
+  const retenido = S.ventas.filter(v => v.pago === 'retenido').reduce((s, v) => s + totalesPedido(v).emprendedor, 0);
+  const liberado = S.ventas.filter(v => v.pago === 'liberado').reduce((s, v) => s + totalesPedido(v).emprendedor, 0) + 412000;
+  const porDespachar = S.ventas.filter(v => v.estado === 'pagado');
+  const meses = [['May', 180], ['Jun', 240], ['Jul', 210], ['Ago', 390], ['Sep', 455], ['Oct', 150]];
+  return `
+  <div class="cabecera"><div><p class="sobre">Hola, Laura</p><h1>Café de la Montaña</h1></div><a class="btn btn-p" href="#/emp/nuevo">+ Publicar producto</a></div>
+  ${porDespachar.length ? `<div class="aviso alerta" style="margin-bottom:18px">${ico.alerta}<div>Tienes <b>${porDespachar.length} pedido(s) por despachar</b>. El cliente ya pagó; registra la guía antes del ${porDespachar[0].limite} para no perder la venta. <a href="#/emp/despacho/${porDespachar[0].id}">Despachar ahora →</a></div></div>` : ''}
+  <div class="kpis">
+    <div class="kpi destacado"><span>Disponible para retirar</span><strong>${fmt(liberado)}</strong></div>
+    <div class="kpi"><span>En custodia (esperando confirmación)</span><strong>${fmt(retenido)}</strong></div>
+    <div class="kpi"><span>Ventas este mes</span><strong>${S.ventas.length + 4}</strong></div>
+    <div class="kpi"><span>Calificación</span><strong>4,8 <span class="estrellas" style="font-size:1rem">★</span></strong></div>
+  </div>
+  <div class="dos-col">
+    <div class="tarjeta"><h2>Ventas por mes (miles de pesos)</h2>
+      <div class="barras">${meses.map(([m, v], i) => `<div><small>${v}</small><i class="${i === meses.length - 1 ? 'ult' : ''}" style="height:${v / 5}px"></i><small>${m}</small></div>`).join('')}</div>
+      <p class="peq muted" style="margin:10px 0 0">Octubre va hasta el día 8.</p></div>
+    <div class="tarjeta"><h2>¿Cómo recibo mi dinero?</h2>
+      <ul class="tiempo"><li class="hecho"><span class="punto">${ico.check}</span><b>El cliente paga</b><small>El dinero queda en custodia</small></li>
+      <li class="hecho"><span class="punto">${ico.check}</span><b>Despachas con guía y foto</b><small>Tienes ${S.config.despacho} días</small></li>
+      <li class="actual"><span class="punto"></span><b>El cliente confirma</b><small>O se confirma solo a los ${S.config.confirmacion} días de entregado</small></li>
+      <li><span class="punto"></span><b>Recibes tu pago</b><small>Menos la comisión, que ya va incluida en el precio</small></li></ul></div>
+  </div>`;
+}
+function vEmpPedidos() {
+  return `<div class="cabecera"><h1>Pedidos</h1></div>
+  <div class="tabla-env"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Productos</th><th class="num">Recibirás</th><th>Estado</th><th>Pago</th><th></th></tr></thead><tbody>
+  ${S.ventas.map(v => `<tr><td><b>#${v.id}</b><br><span class="peq muted">${v.fecha}</span></td><td>${v.cliente}<br><span class="peq muted">${v.ciudad}</span></td>
+    <td class="peq">${v.items.map(i => `${i.cant} × ${prod(i.prod).nombre}`).join('<br>')}</td><td class="num">${fmt(totalesPedido(v).emprendedor)}</td>
+    <td>${badge(ESTADO_PEDIDO[v.estado])}</td><td>${badge(ESTADO_PAGO[v.pago])}</td>
+    <td>${v.estado === 'pagado' ? `<a class="btn btn-sm btn-p" href="#/emp/despacho/${v.id}">Registrar despacho</a>` : v.despacho ? `<button class="btn btn-sm" onclick="verComprobante(${v.id})">Comprobante</button>` : ''}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+let fotoDespacho = false;
+function vEmpDespacho(id) {
+  const v = S.ventas.find(x => x.id === +id); if (!v) return vNoExiste();
+  fotoDespacho = false;
+  return `<div style="max-width:680px">
+  <p class="sobre"><a href="#/emp/pedidos">← Pedidos</a></p><h1>Registrar despacho · #${v.id}</h1>
+  <div class="tarjeta" style="margin:16px 0"><b>Enviar a:</b> ${v.cliente} · Calle 32 # 50-11 · ${v.ciudad}, Antioquia · 310 555 0101<br>
+    <span class="peq muted">${v.items.map(i => `${i.cant} × ${prod(i.prod).nombre}`).join(', ')} · Plazo: ${v.limite}</span></div>
+  <form class="tarjeta" onsubmit="event.preventDefault();despachar(${v.id},this)">
+    <div class="fila"><div><label for="t">Transportadora</label><select id="t" required><option value="">Elige una</option><option>Servientrega</option><option>Coordinadora</option><option>Interrapidísimo</option><option>Envía</option><option>4-72</option></select></div>
+      <div><label for="g">Número de guía</label><input id="g" required placeholder="Ej.: 2093 4471 8820"></div></div>
+    <label>Foto de evidencia (paquete con la guía visible)</label>
+    <div class="subida" onclick="fotoDespacho=true;this.classList.add('lista');this.innerHTML='<b>foto_guia.jpg</b><span class=peq>Lista · toca para cambiarla</span>'"><b>Toca para subir la foto</b><span class="peq">Sin foto no se puede registrar el despacho</span></div>
+    <p class="peq" id="err-foto" style="color:var(--mal);display:none;margin:6px 0 0">Sube la foto del paquete para continuar.</p>
+    <div class="aviso info" style="margin-top:16px">${ico.info}<div>Generaremos un comprobante en PDF y le avisaremos al cliente. La guía y la foto te protegen si hay un reclamo.</div></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px"><a class="btn" href="#/emp/pedidos">Cancelar</a><button class="btn btn-p">Confirmar despacho</button></div>
+  </form></div>`;
+}
+function despachar(id, f) {
+  if (!fotoDespacho) { document.getElementById('err-foto').style.display = 'block'; return; }
+  const v = S.ventas.find(x => x.id === id);
+  v.estado = 'despachado'; v.despacho = { transportadora: f.t.value, guia: f.g.value, fecha: '08 oct 2026' };
+  toast('Despacho registrado. Le avisamos al cliente.'); ir('#/emp/pedidos'); setTimeout(() => verComprobante(id), 400);
+}
+function vEmpProductos() {
+  const lista = PRODUCTOS.filter(p => p.emp === 1);
+  return `<div class="cabecera"><h1>Mis productos</h1><a class="btn btn-p" href="#/emp/nuevo">+ Publicar producto</a></div>
+  <p class="peq muted">En el proyecto, esta pantalla es el CRUD funcional en PHP conectado a MySQL (carpeta <code>productos/</code>).</p>
+  <div class="tabla-env"><table><thead><tr><th>Producto</th><th class="num">Precio base</th><th class="num">Precio final</th><th class="num">Stock</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${lista.map(p => `<tr><td><div class="emp-mini"><div style="width:44px">${arte(p, 'sin-badge')}</div><b>${p.nombre}</b></div></td><td class="num">${fmt(p.base)}</td><td class="num"><b>${fmt(final(p.base))}</b></td><td class="num">${p.stock}</td><td><span class="badge b-ok">Activo</span></td>
+    <td style="text-align:right"><a class="btn btn-sm" href="#/emp/nuevo">Editar</a> <button class="btn btn-sm btn-mal" onclick="toast('Abriría la confirmación de eliminación.')">Eliminar</button></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function vEmpNuevo() {
+  const n = S.nuevoProd, paso = n.paso;
+  const est = i => i < paso ? 'hecho' : i === paso ? 'on' : '';
+  const base = +(n.base || 0);
+  let cuerpo = '';
+  if (paso === 1) cuerpo = `<label for="nn">Nombre del producto</label><input id="nn" value="${n.nombre || ''}" placeholder="Ej.: Café especial 500 g">
+    <label for="nc">Categoría</label><select id="nc">${CATEGORIAS.map(c => `<option value="${c.id}" ${n.cat === c.id ? 'selected' : ''}>${c.nombre}</option>`).join('')}</select>
+    <label for="nd">Descripción</label><textarea id="nd" rows="3">${n.desc || ''}</textarea>`;
+  if (paso === 2) cuerpo = `<div class="fila"><div><label for="nb">Precio base (lo que recibes)</label><input id="nb" inputmode="numeric" value="${n.base || ''}" oninput="S.nuevoProd.base=this.value.replace(/\\D/g,'');document.getElementById('nf').textContent='${'$'} '+Math.round((+S.nuevoProd.base||0)*1.08).toLocaleString('es-CO')"></div>
+    <div><label for="ns">Unidades disponibles</label><input id="ns" type="number" min="0" value="${n.stock || 1}"></div></div>
+    <div class="tarjeta" style="margin-top:14px;background:#fbfaf7;box-shadow:none"><div class="linea"><span>El cliente verá</span><b id="nf">${fmt(final(base))}</b></div><span class="peq muted">Incluye la comisión de la plataforma (${COMISION} %). Tú recibes el precio base.</span></div>`;
+  if (paso === 3) cuerpo = `<label>Fotos del producto</label><div class="subida" onclick="this.classList.add('lista');this.innerHTML='<b>3 fotos listas</b><span class=peq>Toca para cambiar</span>'"><b>Toca para elegir fotos</b><span class="peq">JPG, PNG o WebP · hasta 5 fotos de 5 MB</span></div>`;
+  return `<div style="max-width:680px"><p class="sobre"><a href="#/emp/productos">← Mis productos</a></p><h1>Publicar producto</h1>
+  <div class="pasos-form" style="margin-top:16px"><div class="${est(1)}">1. Qué vendes</div><div class="${est(2)}">2. Precio y stock</div><div class="${est(3)}">3. Fotos</div></div>
+  <div class="tarjeta">${cuerpo}
+    <div style="display:flex;justify-content:space-between;margin-top:18px">
+      ${paso > 1 ? `<button class="btn" onclick="pasoNuevo(-1)">← Atrás</button>` : '<span></span>'}
+      ${paso < 3 ? `<button class="btn btn-p" onclick="pasoNuevo(1)">Siguiente →</button>` : `<button class="btn btn-p" onclick="publicar()">Publicar producto</button>`}
+    </div></div></div>`;
+}
+function pasoNuevo(d) {
+  const n = S.nuevoProd, g = id => document.getElementById(id);
+  if (n.paso === 1) { n.nombre = g('nn').value; n.cat = g('nc').value; n.desc = g('nd').value; if (d > 0 && n.nombre.trim().length < 3) return toast('Escribe un nombre de al menos 3 caracteres.'); }
+  if (n.paso === 2) { n.stock = g('ns').value; if (d > 0 && !(+n.base > 0)) return toast('Escribe un precio mayor que cero.'); }
+  n.paso += d; render();
+}
+function publicar() {
+  const n = S.nuevoProd;
+  PRODUCTOS.push({ id: PRODUCTOS.length + 1, emp: 1, cat: n.cat || 'alimentos', nombre: n.nombre, base: +n.base, stock: +n.stock || 1, tono: '#ece5f6', desc: n.desc || '' });
+  S.nuevoProd = { paso: 1 }; toast('¡Publicado! Ya aparece en el catálogo.'); ir('#/emp/productos');
+}
+
+/* =====================================================================
+   PANTALLAS · ADMINISTRADOR
+   ===================================================================== */
+const ESTADO_REP = { abierto: ['Abierto', 'b-mal'], en_revision: ['En revisión', 'b-acento'], resuelto: ['Resuelto', 'b-ok'] };
+function vAdmin() {
+  const pend = S.reportes.filter(r => r.estado !== 'resuelto');
+  return `<div class="cabecera"><div><p class="sobre">Administración</p><h1>Resumen de octubre</h1></div></div>
+  <div class="kpis">
+    <div class="kpi"><span>Ventas del mes</span><strong>${fmt(18450000)}</strong></div>
+    <div class="kpi destacado"><span>Ingresos por comisión</span><strong>${fmt(1476000)}</strong></div>
+    <div class="kpi"><span>Pagos en custodia</span><strong>${fmt(6230000)}</strong></div>
+    <div class="kpi"><span>Reportes pendientes</span><strong style="color:${pend.length ? 'var(--mal)' : 'inherit'}">${pend.length}</strong></div>
+  </div>
+  <div class="dos-col">
+    <div class="tarjeta"><div class="linea" style="margin-bottom:8px"><h2 style="margin:0">Reportes por atender</h2><a href="#/admin/reportes">Ver todos</a></div>
+      ${pend.length ? pend.map(r => `<a class="tarjeta pedido-fila" style="box-shadow:none;margin-bottom:8px;padding:14px" href="#/admin/reporte/${r.id}"><div><b>R-${r.id} · ${r.motivo}</b><br><span class="peq muted">Pedido #${r.pedido} · ${emp(r.emp).nombre} · ${r.fecha}</span></div>${badge(ESTADO_REP[r.estado])}</a>`).join('') : '<p class="muted">No hay reportes pendientes.</p>'}</div>
+    <div class="tarjeta"><h2>Plataforma</h2>
+      <div class="linea"><span>Emprendedores activos</span><b>128</b></div><div class="linea"><span>Clientes registrados</span><b>2.341</b></div>
+      <div class="linea"><span>Pedidos este mes</span><b>412</b></div><div class="linea"><span>Tasa de reportes</span><b>0,7 %</b></div>
+      <div class="linea"><span>Comisión vigente</span><b>${S.config.comision} %</b></div></div>
+  </div>`;
+}
+function vAdminReportes() {
+  return `<div class="cabecera"><h1>Reportes</h1></div>
+  <div class="tabla-env"><table><thead><tr><th>Reporte</th><th>Pedido</th><th>Cliente</th><th>Emprendedor</th><th>Motivo</th><th class="num">Monto congelado</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${S.reportes.map(r => `<tr><td><b>R-${r.id}</b><br><span class="peq muted">${r.fecha}</span></td><td>#${r.pedido}</td><td>${r.cliente}</td><td>${emp(r.emp).nombre}</td><td>${r.motivo}</td>
+    <td class="num">${r.estado === 'resuelto' ? '—' : fmt(r.monto)}</td><td>${badge(ESTADO_REP[r.estado])}${r.resolucion ? `<br><span class="peq muted">${r.resolucion}</span>` : ''}</td>
+    <td><a class="btn btn-sm ${r.estado !== 'resuelto' ? 'btn-p' : ''}" href="#/admin/reporte/${r.id}">${r.estado === 'resuelto' ? 'Ver' : 'Revisar'}</a></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function vAdminReporte(id) {
+  const r = S.reportes.find(x => x.id === +id); if (!r) return vNoExiste();
+  const e = emp(r.emp);
+  return `<div class="cabecera"><div><p class="sobre"><a href="#/admin/reportes">← Reportes</a></p><h1>Reporte R-${r.id}</h1></div>${badge(ESTADO_REP[r.estado])}</div>
+  <div class="dos-col">
+    <div style="display:grid;gap:16px">
+      <div class="tarjeta"><h2>Versión del cliente · ${r.cliente}</h2><p><b>${r.motivo}</b></p><p>${r.desc}</p>
+        <div class="evid">${Array.from({ length: Math.max(1, r.evidencias) }, () => `<div class="arte" style="background:#efe7da">${svgIco('foto', '#9a8a70')}</div>`).join('')}</div></div>
+      <div class="tarjeta"><h2>Versión de ${e.nombre}</h2>${r.respuesta ? `<p>${r.respuesta}</p>` : '<p class="muted">El emprendedor aún no responde. Tiene 3 días para hacerlo.</p>'}
+        <div class="linea peq"><span>Despacho registrado</span><b>${r.guia}</b></div></div>
+      ${r.estado !== 'resuelto' ? `
+      <form class="tarjeta" onsubmit="event.preventDefault();resolver(${r.id},this)"><h2>Resolver</h2>
+        <label class="opcion-pago"><input type="radio" name="res" value="reembolso" required><div><b>Reembolsar al cliente</b><br><span class="peq muted">Se devuelven ${fmt(r.monto)} y el pedido queda reembolsado.</span></div></label>
+        <label class="opcion-pago"><input type="radio" name="res" value="desestimado"><div><b>Desestimar</b><br><span class="peq muted">Se descongela el pago y se libera al emprendedor.</span></div></label>
+        <label class="opcion-pago"><input type="radio" name="res" value="sancion"><div><b>Reembolsar y sancionar al emprendedor</b><br><span class="peq muted">Advertencia, suspensión o bloqueo.</span></div></label>
+        <label for="sanc">Tipo de sanción (si aplica)</label><select id="sanc"><option value="advertencia">Advertencia</option><option value="suspension">Suspensión por 30 días</option><option value="bloqueo">Bloqueo definitivo</option></select>
+        <label for="obs">Observaciones (se envían a ambas partes)</label><textarea id="obs" rows="3" required placeholder="Explica la decisión"></textarea>
+        <button class="btn btn-p btn-bloque" style="margin-top:16px">Guardar resolución</button></form>` : `<div class="aviso">${ico.escudo}<div>Resuelto: <b>${r.resolucion}</b>. ${r.observaciones || ''}</div></div>`}
+    </div>
+    <aside class="tarjeta pegajoso"><h2>Datos</h2>
+      <div class="linea peq"><span>Pedido</span><b>#${r.pedido}</b></div><div class="linea peq"><span>Fecha del reporte</span><b>${r.fecha}</b></div>
+      <div class="linea peq"><span>Monto en disputa</span><b>${fmt(r.monto)}</b></div><div class="linea peq"><span>Pago</span>${badge(r.estado === 'resuelto' ? ESTADO_PAGO.liberado : ESTADO_PAGO.congelado)}</div>
+      <hr class="sep"><div class="emp-mini">${logo(e, 40)}<div><b>${e.nombre}</b><br><span class="peq muted">${e.rating} ★ · ${e.resenas} reseñas</span></div></div>
+      <div class="linea peq" style="margin-top:10px"><span>Reportes anteriores</span><b style="color:${r.antecedentes ? 'var(--mal)' : 'inherit'}">${r.antecedentes}</b></div>
+      <div class="linea peq"><span>Verificado</span><b>${e.verificado ? 'Sí' : 'No'}</b></div></aside>
+  </div>`;
+}
+function resolver(id, f) {
+  const r = S.reportes.find(x => x.id === id);
+  r.estado = 'resuelto'; r.resolucion = f.res.value === 'sancion' ? 'sanción (' + f.sanc.value + ')' : f.res.value; r.observaciones = f.obs.value;
+  toast('Resolución guardada y notificada a ambas partes.'); render();
+}
+function vAdminUsuarios() {
+  const est = { activo: 'b-ok', advertido: 'b-acento', suspendido: 'b-mal', bloqueado: 'b-mal' };
+  return `<div class="cabecera"><h1>Usuarios</h1><input style="max-width:280px" placeholder="Buscar por nombre o correo" aria-label="Buscar usuarios"></div>
+  <div class="tabla-env"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Perfil</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${S.usuarios.map((u, i) => `<tr><td><b>${u.nombre}</b></td><td>${u.correo}</td><td class="peq">${u.perfil}</td><td><span class="badge ${est[u.estado]}">${u.estado}</span></td>
+    <td style="text-align:right">${u.estado === 'suspendido' ? `<button class="btn btn-sm" onclick="S.usuarios[${i}].estado='activo';toast('Cuenta reactivada.');render()">Reactivar</button>`
+      : `<button class="btn btn-sm btn-mal" onclick="S.usuarios[${i}].estado='suspendido';toast('Cuenta suspendida. Se notificó al usuario.');render()">Suspender</button>`}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function vAdminConfig() {
+  const c = S.config;
+  return `<div class="cabecera"><h1>Configuración</h1></div>
+  <div class="dos-col" style="grid-template-columns:1fr 1fr">
+    <form class="tarjeta" onsubmit="event.preventDefault();guardarConfig(this)"><h2>Comisión y plazos</h2>
+      <label for="cc">Porcentaje de comisión</label><div style="display:flex;gap:8px;align-items:center"><input id="cc" type="number" step="0.5" min="0" max="30" value="${c.comision}"><span>%</span></div>
+      <p class="peq muted" style="margin-top:6px">Aplica a productos nuevos y al precio mostrado; los pedidos ya pagados conservan su comisión.</p>
+      <label for="cd">Días para despachar</label><input id="cd" type="number" min="1" value="${c.despacho}">
+      <label for="cf">Días para confirmación automática (desde la entrega)</label><input id="cf" type="number" min="1" value="${c.confirmacion}">
+      <label for="cr">Días para reportar (desde la entrega)</label><input id="cr" type="number" min="1" value="${c.reportar}">
+      <button class="btn btn-p btn-bloque" style="margin-top:16px">Guardar cambios</button>
+      <p class="peq muted" style="margin:10px 0 0">Cada cambio queda registrado en la bitácora.</p></form>
+    <div class="tarjeta"><h2>Categorías</h2>
+      ${CATEGORIAS.map(k => `<div class="linea" style="border-bottom:1px solid var(--borde);padding:10px 0"><span>${k.nombre}</span><span><span class="badge b-ok">Activa</span> <button class="btn btn-sm" onclick="toast('Editar categoría')">Editar</button></span></div>`).join('')}
+      <form style="display:flex;gap:8px;margin-top:14px" onsubmit="event.preventDefault();if(this.n.value.trim()){CATEGORIAS.push({id:'hogar',nombre:this.n.value,color:'#5a4b8a'});toast('Categoría creada.');render()}">
+        <input name="n" placeholder="Nueva categoría" aria-label="Nueva categoría"><button class="btn btn-p">Agregar</button></form></div>
+  </div>`;
+}
+function guardarConfig(f) {
+  S.config = { comision: +f.cc.value, despacho: +f.cd.value, confirmacion: +f.cf.value, reportar: +f.cr.value };
+  toast('Configuración guardada.'); render();
+}
+
+function vNoExiste() { return `<div class="vacio"><h2>Esta página no existe</h2><a class="btn btn-p" href="#/">Volver al inicio</a></div>`; }
+
+/* ---------- enrutador ---------- */
+const RUTAS = [
+  [/^#?\/?$/, vCatalogo, 'cliente'], [/^#\/producto\/(\d+)$/, vProducto], [/^#\/emprendedor\/(\d+)$/, vEmprendedor],
+  [/^#\/carrito$/, vCarrito, 'cliente'], [/^#\/checkout$/, vCheckout, 'cliente'], [/^#\/confirmado$/, vConfirmado, 'cliente'],
+  [/^#\/pedidos$/, vPedidos, 'cliente'], [/^#\/pedido\/(\d+)$/, vPedido, 'cliente'], [/^#\/reportar\/(\d+)$/, vReportar, 'cliente'],
+  [/^#\/login$/, vLogin], [/^#\/registro$/, vRegistro], [/^#\/recuperar$/, vRecuperar],
+  [/^#\/emp$/, vEmpPanel, 'emprendedor'], [/^#\/emp\/pedidos$/, vEmpPedidos, 'emprendedor'], [/^#\/emp\/despacho\/(\d+)$/, vEmpDespacho, 'emprendedor'],
+  [/^#\/emp\/productos$/, vEmpProductos, 'emprendedor'], [/^#\/emp\/nuevo$/, vEmpNuevo, 'emprendedor'],
+  [/^#\/admin$/, vAdmin, 'admin'], [/^#\/admin\/reportes$/, vAdminReportes, 'admin'], [/^#\/admin\/reporte\/(\d+)$/, vAdminReporte, 'admin'],
+  [/^#\/admin\/usuarios$/, vAdminUsuarios, 'admin'], [/^#\/admin\/config$/, vAdminConfig, 'admin'],
+];
+function render() {
+  const h = location.hash || '#/';
+  for (const [re, fn, rol] of RUTAS) {
+    const m = h.match(re);
+    if (m) {
+      if (rol && S.rol !== rol && S.sesion) S.rol = rol;   // al entrar a una pantalla de otro rol, se cambia de rol
+      barra();
+      const y = window.scrollY;
+      document.getElementById('app').innerHTML = fn(...m.slice(1));
+      if (render.ultima === h) window.scrollTo(0, y); else window.scrollTo(0, 0);
+      render.ultima = h;
+      return;
+    }
+  }
+  barra(); document.getElementById('app').innerHTML = vNoExiste();
+}
+function cambiarRol(r) {
+  S.rol = r; S.sesion = true;
+  ir(r === 'cliente' ? '#/' : r === 'emprendedor' ? '#/emp' : '#/admin');
+  render();
+}
+document.querySelectorAll('.rol button').forEach(b => b.addEventListener('click', () => cambiarRol(b.dataset.rol)));
+window.addEventListener('hashchange', () => { cerrarModal(); render(); });
+render();
+</script>
+</body>
+</html>
